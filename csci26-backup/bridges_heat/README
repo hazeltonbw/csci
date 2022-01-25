@@ -1,0 +1,253 @@
+===================================================================
+ ____  ____  ___ ____   ____ _____ ____    _   _ _____    _  _____ 
+| __ )|  _ \|_ _|  _ \ / ___| ____/ ___|  | | | | ____|  / \|_   _|
+|  _ \| |_) || || | | | |  _|  _| \___ \  | |_| |  _|   / _ \ | |  
+| |_) |  _ < | || |_| | |_| | |___ ___) | |  _  | |___ / ___ \| |  
+|____/|_| \_\___|____/ \____|_____|____/  |_| |_|_____/_/   \_\_|  
+                                                                   
+===================================================================
+
+This assignment will teach you one of the most common patterns in STEM. It
+seems really simple - you're just averaging numbers together, but it is used
+in all sorts of places, from doing image blurring in photoshop to simulating
+stress in mechanical engineering to simulating water (my Master's degree) to
+heat transfer... which is our topic for today.
+
+Purpose: This assignment is going to teach you three things:
+Part 1) How to do file I/O (2 points)
+Part 2) How to average values across a 2D vector (2 points for basic, 2 for
+intermediate, 2 for advanced)
+Part 3) How to write an image (2 points)
+
+----------------------------------------------------------------------------
+
+Part 1 - 2 points
+
+File I/O: Reading and writing to files is a crucial part of most computer
+programs. You can read from a file by creating a variable of type ifstream,
+and passing to it the file name you want to read from like this:
+ifstream ins("File.txt");
+...this creates a variable named ins that will read from the file File.txt in
+your local directory. You can read from it using >>, just like with cin:
+int x = 0;
+ins >> x; //Read an integer from the file into x
+Identical to what you know, except instead of cin it is that variable you made, ins.
+
+You can alternatively use my read library to read from a file, and that looks
+like this:
+int x = read(ins); //Reads one integer from the file into x
+
+Documentation for my read library: https://github.com/ShakaUVM/read
+Be sure to like and subscribe on my Github page, and pound that notification
+button. (j/k)
+
+For part one, you need to open up a file for reading (done for you already),
+read in how many rows and columns it has (done for you already), create a 2D
+vector with that many rows and columns (done for you already), and then read
+rows*columns data points from the file into the 2D vector (which is what you
+have to do). 
+
+It's pretty simple, really, and is worth 2 points.
+
+----------------------------------------------------------------------------
+
+Part 2 - 6 points
+
+-=Averaging values (2 points)=-:
+There is a certain technique, that seems really simple, that is nonetheless
+used in many many different areas of the world. Given a point on a 2D array,
+average together its nearest neighbors. That's it.
+
+Sometimes it's 4 neighbors (North South East West), sometimes it's 8 neighbors
+(NW, N, NE, W, E, SW, S, SE). Sometimes you average in the point itself,
+sometimes you don't, it depends on your application. But in all cases, you'll
+have *two different copies of the 2D array*, one from reading from, and one to
+writing to (if you read and write to the same array, it'll screw up the
+computations). And then when you're finished writing to the second array, you
+swap them, and the new array for one frame becomes the old array in the next
+frame.
+
+What is a frame? One unit of time. Your program will run your
+averaging function over and over to simulate heat being transferred through a
+metal sheet over time.
+
+The equation you must implement for this assignment is this:
+**The new value at a point is equal to the average of the current value at that
+point and the average of its four neighbors.**
+
+**Each of the averages must be rounded to the nearest integer.**
+
+This is the heart of the program. You're going to run that algebraic formula
+on every point in the 2D vector, and write the new value into a different 2D
+vector (called vec2, which holds all the new values - vec holds all the old
+values).
+
+Example, with a 3x3 vector:
+0 0 0
+0 8 10
+0 0 0 
+
+Suppose we're currently processing the point corresponding to 8 in the example
+above. The average of the neighbors is 3. Why? The neighbors are: 10,0,0,0.
+(10+0+0+0)/4 = 10/4 = 2.5 = 3, since we round to the nearest int.
+
+So then we average together 8 and 3 and get 6. Why? (8+3)/2 = 5.5 = 6, since
+we round to the nearest int. So that spot in vec2 must be set to 6.
+
+After running the algorithm on every point in the 3x3 vector above, vec2 will
+be set to:
+0 2 3
+2 6 7
+0 2 3
+(Note that they don't add up exactly the same due to rounding errors.)
+
+After the second iteration, it will be:
+1 3 4
+2 5 6
+1 3 4
+
+After the third iteration, it will be:
+2 3 5
+2 5 5
+2 3 5
+(See how the heat is spreading through the substance?)
+
+One really big super important skill you need to learn is how to make your own
+test cases so that you can test your code to see if it works right. Try making
+small input files like this (watch out for a crash in the image rending sample
+code if you make something this small) so that you can test your code and
+verify it is working right.
+
+Handling the edges can be tricky - corners only have two neighbors to average
+together, and other edge spots have one edge. A 1x1 array has no neighbors!
+
+-=Fixed temperature points (2 points)=-:
+Once you get the above working, build in support for having some points in the
+2D vector having constant temperatures. Think of it as applying constant heat
+or cold at that point, so that frame after frame it will stay the same. 
+
+For this assignment, we will input constant temperature using a negative
+number. (Since our numbers mean Kelvin, there are no negative temperatures.)
+When you see a negative number, it means the number is actually positive, but
+fixed in place. So -100 means that that spot is permanently set to 100K. -1000
+means that that spot is permanently 1000K.
+
+Example:
+-128    0       0       0
+0       0       0       0
+0       0       0       0
+-1      0       0       128
+
+(This means the top left part of the surface is permanently at 128K, the
+bottom left is permanently at 1K, the bottom right starts at 128K but can
+change, and the rest of the surface is at absolute zero.)
+
+After one iteration:
+-128    22      0       0
+22      0       0       0
+0       0       0       22
+-1      0       22      64
+(You can see the top left and bottom left stayed the same, the bottom right
+cooled as the heat transferred out of it to its neighbors.)
+
+After two iterations:
+-128    33      4       0
+33      6       0       4
+4       0       6       22
+-1      4       22      43
+
+After three iterations:
+-128    40      8       2
+40      12      3       6
+8       3       9       20
+-1      6       20      33
+
+After 100 iterations:
+-128    93      78      73
+82      74      69      67
+45      53      57      59
+-1      34      48      54
+
+-=Holes (2 points)=-:
+
+Holes are the third thing to implement if you want full points. Any spot
+marked with a -9999 is a hole. It transfers no heat in or out. It will always
+just be -9999, and will be drawn as black in my cool visualizer. You can use
+this to create shapes for heat transfer other than rectangles.
+
+Example:
+-1000   -1000   -1000   -9999   -1      -1      -1
+-1000   -1000   -1000   -9999   -1      -1      -1
+0       500     500     -9999   500     500     0
+0       500     500     -9999   500     500     0
+0       500     500     -9999   500     500     0
+0       0       500     500     500     0       0
+0       0       0       500     0       0       0
+
+After one iteration:
+-1000   -1000   -1000   -9999   -1      -1      -1
+-1000   -1000   -1000   -9999   -1      -1      -1
+250     500     584     -9999   417     375     84
+84      438     500     -9999   500     438     84
+84      375     500     -9999   500     375     84
+0       125     375     500     375     125     0
+0       0       167     334     167     0       0
+
+After two iterations:
+-1000   -1000   -1000   -9999   -1      -1      -1
+-1000   -1000   -1000   -9999   -1      -1      -1
+389     534     626     -9999   355     305     119
+171     402     504     -9999   476     386     143
+119     331     459     -9999   459     331     119
+35      157     349     431     349     157     35
+0       49      202     306     202     49      0
+
+After three iterations:
+-1000   -1000   -1000   -9999   -1      -1      -1
+-1000   -1000   -1000   -9999   -1      -1      -1
+479     569     653     -9999   308     260     135
+237     394     500     -9999   438     350     176
+149     308     427     -9999   422     306     145
+64      174     331     383     331     174     64
+21      85      219     292     219     85      21
+
+After 50 iterations:
+-1000   -1000   -1000   -9999   -1      -1      -1
+-1000   -1000   -1000   -9999   -1      -1      -1
+851     849     849     -9999   61      60      59
+712     707     704     -9999   118     115     112
+594     583     569     -9999   176     165     158
+508     486     440     333     244     207     193
+468     443     397     327     264     227     210
+
+Tip: It's pretty easy to implement a hole, just be careful that your code
+won't crash if an element has no neighbors at all.
+
+Tip: You can adjust the usleep value to change how fast the simulation runs.
+You can even run it one frame at a time if you want. Just remember to remove
+any delay before it gets submitted or your code might time out in the
+autograder.
+----------------------------------------------------------------------------
+
+Part 3 - BRIDGES
+
+-=Writing an image (2 points)=-:
+You must render an image of the final frame of the simulation on BRIDGES. It
+should look exactly like the cool little visualization I made for you while
+the simulation is running. You'll submit to me the URL of your visualization
+so I can take a look at it.
+
+How do you do this? Well, I have an example of how to write one color to one
+point in the image (which is called a pixel). All you need to do is look at
+my code, and make it put the color values into this cg object thingy, rather
+than printing them to the screen. You shouldn't have any calls to
+clearscreen(), setbgcolor(), etc., as those are all calls that print things to
+the local terminal. Instead, you need to write all the color data to the cg
+object using the example line of code as your model.
+
+This is a really, really important skill to develop in life. (Not just in
+computer science, but in life.) Find something similar to what you want to
+accomplish, and then modify it and make it yours. I'm not going to give any
+more guidance that this - you have all the tools you need to do this, you just
+need to reassemble them so that the pixels appear on BRIDGES instead of in the
+terminal window.

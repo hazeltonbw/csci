@@ -1,0 +1,16 @@
+This program will implement the iota() function from C++, which is one of the simplest STL functions ever made.
+
+Basically, it is used to initialize an array with something like this: {1,2,3,4,5,6,7,8,9}
+
+I have provided a reference implementation in main.c so that you can see all the details of the code that you have to implement in assembly.
+
+In short, your assembly code will be passed the following values:
+R0 will hold a memory address where an integer array can be found.
+R1 will hold the size of the array.
+R2 will hold the starting value to start counting up from.
+
+You will set the first address in memory to the starting value, set the next address in memory to the starting value + 1, the next address in memory to the starting value + 2, and so on and so forth until you reach the end of the array.
+
+After you return, main() will take over again and print out the array with the new values
+It will also print out two "guard values" which you don't need to worry about too much.
+The guard values should always be 42 and 42. If they change, that means your assembly code is trampling memory outside the boundary of the array passed in.

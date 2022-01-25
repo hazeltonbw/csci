@@ -1,0 +1,39 @@
+========================================
+			Triangle Testing
+========================================
+
+The purpose of this assignment is to get you thinking about:
+1) How software can fail
+2) How to test software so you know it is correct
+3) How to integrate tests with the software development process
+
+Your program will be very simple, in fact main is already done for you, and you only need to write a single function. This function will take in the length of the three sides of a triangle (three floats) and return if the given triangle is:
+A) Equilateral (3 equal sides)
+B) Isoceles (2 equal sides)
+C) Right (one of the interior angles is pi/2 radians, i.e. 90 degrees)
+D) Other (a triangle not one of the above)
+E) Error (the input doesn't describe a valid triangle)
+
+Resolve conflicts in the order above, so if it is both isoceles and right then return isoceles, for example.
+
+Writing this function should be fairly easy. (An equilateral triangle has three equal sides, you should be able to write code for that by now, right?)
+
+The kicker is that you don't know what test cases I will test for. So you're going to have to generate your own test cases and use them to see if your code is correct. Every time you make a change to the original function, you should rerun the input tester to see if you are passing more test cases.
+
+You are done when your code passes 100% of the test cases you have written, and 100% of the test cases *I* have written (which will not be shared with you), so this means you will need to anticipate what sorts of things I might test. I could literally throw anything at your code, and your code will need to handle it correctly.
+
+You make inputfiles starting at inputfile0, inputfile1, inputfile2, etc. until you think you're done.
+
+Each inputfile will have a corresponding outputfile. For example, outputfile0 will have the expected output of inputfile0. (For example, if inputfile0 holds "3 4 5" then outputfile0 should hold "right".)
+
+To run the input tester, type "input_tester.sh".
+
+On TDD:
+You can go about this project however you want, but the TDD (Test Driven Development) way is to write test(s) *first*, test them, make sure they fail, and then write code in your function to make them pass. Now you've got a test you know works, and if you ever screw up your code (a "regression") your test should pick it up.
+So you have confidence that your code works, and later changes don't break anything!
+
+
+Notes:
+I) You are free to edit main if you want to add more error handling there
+II) Don't make any assumptions about what I will type in to your code. You might be cin-ing three floats, and I might type in "alligator". (This should return "error".)
+

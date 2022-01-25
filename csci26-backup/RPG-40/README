@@ -1,0 +1,40 @@
+======================================
+ ____  ____   ____       _  _    ___  
+|  _ \|  _ \ / ___|     | || |  / _ \ 
+| |_) | |_) | |  _ _____| || |_| | | |
+|  _ <|  __/| |_| |_____|__   _| |_| |
+|_| \_\_|    \____|        |_|  \___/ 
+                                      
+======================================
+
+For this assignment, you will make a roleplaying game. 
+
+This is an "open ended assignment" meaning it will be graded by hand, and your
+grade will be based on how many design criteria you fulfill. You will work
+with a partner on this assignment, so my advice is to figure out early on who
+will be responsible for each design criteria, and to set deadlines ahead of
+the final deadline for when they'll be done. If your partner flakes, then
+you'll have to pick up the work.
+
+Purpose: To teach you how to work on programming assignments with other people
+and to get experienced writing code on longer projects rather than little
+functions or toy assignments. Also to learn how the design process works a
+bit.
+
+Design Criteria:
+1) World Map that the user can move around
+2) Combat of some sort
+3) Must have colors (Use #include "/public/colors.h")
+4) Must have 5 puzzles to win the game
+5) 40 lines of dialogue and/or descriptions of the world
+
+Extra Credit:
+1) Nonblocking I/O (also in colors.h)
+2) Compose Original Music and Cover Art (Make it yourself) Upload music to
+Youtube.
+3) Inventory System
+
+Each one of these is a letter grade. If you do none, you get a 0%, if you do
+one you get an F (50%), two a D (60%), three a C (70%), four a B (80%), five
+an A (100%), and each extra credit point is an extra 10% added to your grade.
+So the max grade is 130%.

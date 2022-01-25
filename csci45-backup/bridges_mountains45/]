@@ -1,0 +1,30 @@
+  
+ //void findPath(int *elev_data, int imgWidth, int imgHeight, int startRow, int maxVal)
+.global findPath
+findPath:
+	push {lr}
+	push {r4-r12}
+	cmp r3, #0
+	blt die
+	cmp r3, r2
+	bge die
+
+	mov r5, r0
+	mov r6, #0
+	top:
+		ldr r7, [r5, r6]
+
+	die:
+		ldr r0, =dieText
+		bl printf
+		b return
+		
+return:
+	pop {r4-r12}
+	pop {pc}
+
+.data
+	.balign 4
+	dieText: .asciz "Invalid starting row. Resulting link will show invalid map. \n"
+
+

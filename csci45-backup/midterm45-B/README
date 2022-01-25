@@ -1,0 +1,60 @@
+====================================
+ _____ ___ ____  ____  _____ ____  
+|  ___|_ _| __ )| __ )| ____|  _ \ 
+| |_   | ||  _ \|  _ \|  _| | |_) |
+|  _|  | || |_) | |_) | |___|  _ < 
+|_|   |___|____/|____/|_____|_| \_\
+                                   
+====================================
+
+1,1,2,3,5,8,13,21,34... the Fibonacci sequence is a mathematical series where
+the value of each element is equal to the sum of the two previous terms.
+
+Purpose: To write a Fibonacci function in assembly.
+
+Restrictions: You must do all your code writing in you.s, and the only
+function you can call is print_int to help debug your assembly
+
+Goal: You have to rewrite this code in assembly:
+
+void c_fibber(int *arr, size_t index, size_t count) {
+    if (!arr) return;
+    if (index < 2) return; //The first two elements are set in main
+    for (size_t i = index; i < index+count; i++)
+        arr[i] = arr[i-1] + arr[i-2];
+}
+
+Your code will do a simple for loop that sets all the values in the range
+specified to the values of the two previous elements.
+
+If you forget to check for arr being NULL (i.e. zero), you are going to seg
+fault.
+If you forget to check for index being smaller than 2, you are going to seg
+fault.
+
+If you do seg fault, doing "gdb a.out" and then "run" from inside the
+debugger will help reveal what line of code is crashing, and remember
+"info r" will print all the current registers.
+
+The entire function took me exactly 30 lines of code. The hardest part is
+figuring out the algebra of what memory address to read from.
+
+So here's a reminder on how to read memory addresses using base+offset.
+
+/******************* Reading from an int array ***********************/
+Suppose you are going to translate "int x = arr[10];" into ARM32.
+
+In assembly you will do this (R7 is x, R8 is arr, R9 is the offset):
+LDR R7, [R8,R9]
+
+What value do you think R9 has? 10? Wrong. **R9 is 40.** Why? Because each int is
+4 bytes on our system, so moving 10 ints to the right is 40 bytes to the
+right.
+
+All LDR and STR commands have to be aligned to 4 byte boundaries. (All
+base+offsets used in LDR and STR must be a multiple of 4.)
+
+If you try doing something like this:
+STR R7, [R8,#10] 
+...your code will crash because 10 is not a multiple of 4. Arr (R8) is
+guaranteed to be a multiple of 4, so you don't need to check that.

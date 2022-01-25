@@ -1,0 +1,51 @@
+====================================
+ ____  _   _ ___ _____ _______   __
+/ ___|| | | |_ _|  ___|_   _\ \ / /
+\___ \| |_| || || |_    | |  \ V / 
+ ___) |  _  || ||  _|   | |   | |  
+|____/|_| |_|___|_|     |_|   |_|  
+
+====================================
+
+For this assignment you will implement a simple program that will shift a
+number left or right.
+
+The user will first type in the number to shift.
+They will then type in how many digits to shift it.
+Then they will type either an odd number (which means shift left) or an even
+number (which means shift right)
+
+The program then outputs the result and terminates.
+
+All numbers are regular 32 bit signed integers.
+
+Remember left shifting by one bit is the same as a multiply by 2, and a right
+shift (we should always do arithmetic right shifts) is the same as division by
+2.
+
+There is a compile bug, and a logic bug. You need to fix both in main.s.
+
+Sample runs:
+
+====================================
+
+Enter three numbers.
+1) A number you want to shift.
+2) How many binary digits you want to shift it.
+3) An odd number means shift left, an even number means shift right.
+5
+2
+3
+20
+
+====================================
+
+Enter three numbers.
+1) A number you want to shift.
+2) How many binary digits you want to shift it.
+3) An odd number means shift left, an even number means shift right.
+123
+3
+8
+15
+

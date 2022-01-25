@@ -1,0 +1,227 @@
+=========================================================================
+ __  __    _    ____  _  _______     __  _   _    _    __  __ _____ ____  
+|  \/  |  / \  |  _ \| |/ / _ \ \   / / | \ | |  / \  |  \/  | ____/ ___| 
+| |\/| | / _ \ | |_) | ' / | | \ \ / /  |  \| | / _ \ | |\/| |  _| \___ \ 
+| |  | |/ ___ \|  _ <| . \ |_| |\ V /   | |\  |/ ___ \| |  | | |___ ___) |
+|_|  |_/_/   \_\_| \_\_|\_\___/  \_/    |_| \_/_/   \_\_|  |_|_____|____/ 
+                                                                          
+=========================================================================
+
+Objective: This assignment is designed to teach you how to make a simple
+random name generator using a Markov process and an adjacency matrix
+representation of a graph.
+
+How: You will read in a list of words (uppercasing them all for simplicity)
+and count how often each letter follows another letter. For example, if you
+input "ABC" and "ABD", then B followed A two times, C followed B one time, and
+D followed B one time.  *Additionally and very importantly*, A was the
+starting letter 2 times, C was the ending letter one time, and D was the
+ending letter one time.
+
+You'll make a 2D vector of size 27x27, and will iterate over every character
+of every word, with each row indicating the letter we read last time and the
+column the letter we are reading this time. For example, if we read in the
+word "AM", then the row corresponding to A (row 0) and the column
+corresponding to M (column 12) would be incremented one time. When you finish
+reading in the words, you'll get something like this.
+
+This is what the 2D vector looks like after reading in "ABC" and "ABD":
+
+  A B C D E F G H I J K L M N O P Q R S T U V W X Y Z $
+A 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+B 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+C 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+D 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+E 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+F 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+G 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+H 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+I 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+J 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+K 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+M 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+N 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+O 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+P 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+Q 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+R 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+S 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+T 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+U 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+V 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+X 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+Y 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+Z 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+^ 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+
+Explanation: B followed A twice, so row A (index 0) column B (index 1) is set
+to 2. C followed B once, so row B column C is 1, and ditto for D.
+
+Now look at the last row and column - this is why I said we'd make a 27x27
+vector, not a 26x26 if we were just doing ASCII letters. In computer science,
+the '^' character means "The beginning of a string" and the '$' character
+means "The end of a string". Since we need to know where to begin our random
+name generation, and where to end it, we need to record which letters were at
+the beginning and end of the string. As you can see, row ^ (index 26) column A
+(index 0) is 2 since A started a string twice. Since C and D were the two
+characters that ended the strings, row C (index 2) column $ (index 26) is 1,
+and ditto for D.
+
+PRO TIP: If you want to convert from 'A' to index 0, or M to index 12, you can
+do so by substracting 'A'. I.e., if you have a char c that holds the current
+letter and you want to know what row/col it corresponds to, int index = c -
+'A' will do ya.
+
+For a longer example, here is the military alphabet as input:
+Alpha
+Bravo
+Charlie
+Delta
+Echo
+Foxtrot
+Golf
+Hotel
+India
+Juliet
+Kilo
+Lima
+Mike
+November
+Oscar
+Papa
+Quebec
+Rome
+Sierra
+Tango
+Uniform
+Victor
+Whiskey
+Xray
+Yankee
+Zulu
+
+This creates the following adjacency matrix:
+  A B C D E F G H I J K L M N O P Q R S T U V W X Y Z $
+A 0 0 0 0 0 0 0 0 0 0 0 1 0 2 0 1 0 2 0 0 0 1 0 0 1 0 6
+B 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0
+C 1 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1
+D 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+E 0 1 2 0 1 0 0 0 0 0 0 2 1 0 0 0 0 2 0 1 0 0 0 0 1 0 4
+F 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 1
+G 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0
+H 2 0 0 0 0 0 0 0 1 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0
+I 1 0 1 0 3 1 0 0 0 0 1 1 1 1 0 0 0 0 1 0 0 0 0 0 0 0 0
+J 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0
+K 0 0 0 0 3 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 1 0 0 3 0 0 0 0 0 1 1 0 0 0 1 1 0 0 0 0 0 1
+M 1 1 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+N 0 0 0 1 0 0 1 0 1 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0
+O 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 2 1 2 0 1 0 1 0 0 4
+P 2 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+Q 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0
+R 3 0 0 0 0 0 0 0 0 0 0 1 1 0 2 0 0 1 0 0 0 0 0 0 0 0 3
+S 0 0 1 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+T 2 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 2
+U 0 0 0 0 1 0 0 0 0 0 0 2 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1
+V 0 0 0 0 1 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0
+W 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+X 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0
+Y 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2
+Z 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0
+^ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0
+
+Look at the bottom row - you can see that each letter of the English alphabet
+started a word exactly one time.
+
+You will do the above process twice - once for first names, and once for last
+names.
+
+End part 1.
+
+Part 2 is generating random names.
+
+You will use the adjacency matrix to randomly make new words using the pattern
+learned from the old words.
+
+You will do this twice, once for first names and once for last names. There's
+no difference in the algorithm between the two.
+
+Step 1) Roll a random starting letter. Tally up how many words were inputted
+(or you could have counted when doing the input phase, either way). In the
+military alphabet example above, there were 26 words. So we will roll a 26
+sided die, as such: int roll = rand() % count; //Count is 26 in this example
+
+We then repeatedly subtract off the numbers in each column, starting at A and
+ending with Z. If the roll ever goes negative, then that is our winner. For
+example, say that we had three words in our input file:
+ABC
+ABD
+BAA
+
+Then count would be three (there's three words), so int roll = rand() % count
+would give us a random number from 0 to 2. We iterate from A to Z, subtracting
+off the weight of that column from row ^ until roll turns negative. For
+example, if we rolled a 2, the first column's weight is for A, and A appeared
+twice as a starting letter, so we subtract 2. Roll is now 0. It's not
+negative, so we move on. We subtract off the weight of B, which is 1. Roll is
+now negative, so B is selected.
+
+This process will give us a proportional roll - out of the three options to
+roll (0,1,2) two of them (0,1) will give us A, and one (2) will give us B,
+thus matching the proportion of what letters started words in the input.
+
+So now that we're on B, we will compute the sum of all the entries in row B,
+which will be 3. B was followed one time by C, once by D, and once by A. So we
+will roll a 3 sided die. If we get a 0, we'll move to A, if we get a 1 we'll
+move to C, and if we get a 2, we'll move to D.
+
+Let's say we roll a 0 and move to A. There are four letters that follow A - B
+follows twice, A follows A once, and $ (the end of the word) follows once. So
+we roll a four sided die this time.
+If we roll a 0 we will move right back to A, if we roll a 1 or 2 we will move
+back to B, and if we roll a 3 we end the word and end the algorithm.
+
+Here's a sample run using the above input (ABC, ABD, BAA):
+Please enter a filename of firstnames to open:
+foo
+foo
+foo successfully loaded. First Names read: 3
+Please enter a filename of lastnames to open:
+foo
+foo successfully loaded. Last Names read: 3
+1. Print Adjacency Matrices
+2. Generate Random Names
+2
+Please enter random seed:
+1
+How many random names do you want to generate?
+5
+ABA BC
+ABC ABC
+AABC BD
+ABD A
+ABABABABC ABABD
+
+Here's a sample run using all names in the US:
+Please enter a filename of firstnames to open:
+/public/names/first/us.txt
+/public/names/first/us.txt
+/public/names/first/us.txt successfully loaded. First Names read: 5163
+Please enter a filename of lastnames to open:
+/public/names/last/us.txt
+/public/names/last/us.txt successfully loaded. Last Names read: 88799
+1. Print Adjacency Matrices
+2. Generate Random Names
+2
+Please enter random seed:
+11
+How many random names do you want to generate?
+5
+JUIDEAVA RERISES
+KAMA KICALSCGHERS
+ISIOMARA CHOH
+MANISA ERUS
+E LORY
+

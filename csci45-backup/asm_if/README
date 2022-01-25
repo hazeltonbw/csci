@@ -1,0 +1,37 @@
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+					ASM IF CHALLENGE
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+For this assignment, you will need to implement an if statement
+in assembly with as high a speed as possible.
+
+You will write a function called asm_if, which will take four
+ints as parameters (that will get passed in as R0 through 
+R3 as usual). It will return an int as a return value, which
+will be 1 if true, or 0 if false.
+
+In C, booleans are ints, and ints are booleans. (They're not
+separate types like in C++.)
+
+You will implement the following C function in assembly:
+int asm_if(int a, int b, int c, int d) {
+    return ((a | b) && (c | d)) || ((a | ~d) & (~b & d));
+}
+
+You will write a program purely in assembler that will do the
+same thing as the C function above. Your function will be run
+many many times and tested for both correctness and speed.
+
+You will be graded on two things:
+1) Correctness
+2) Fast Execution Speed
+
+For #1 - you must pass all test cases. Easy enough, eh?
+
+For #2 - you must beat the C compiler's version of the code
+
+In addition, there will be an optional third category:
+3) Artistic Style
+
+If you cannot beat the C compiler on speed, then do something
+cool with your code and you will get the points for it anyway.

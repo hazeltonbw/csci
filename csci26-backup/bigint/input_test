@@ -1,0 +1,17 @@
+#!/bin/bash
+times=$(ls | grep inputfile | wc -l )
+lines=-1
+for ((i = 0; i < times; i++)) 
+do 
+	diff=$(./a.out < inputfile${i} | diff -B -w - outputfile${i})
+
+	# $? is the error state for diff. If it's 0, then diff found no difference.
+	# Anything else is considered an error state.
+	if [ $? -eq 0 ] 
+	then
+		echo "Test inputfile${i} passed!"
+	else
+		echo "Test inputfile${i} failed!"
+		echo ${diff}
+	fi
+done

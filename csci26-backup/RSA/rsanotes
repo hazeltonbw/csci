@@ -1,0 +1,4 @@
+// x = x << 8; // left shift 8 bits for new character
+// use ascii dec number for character
+//  last 8 bits = x % 256;
+// x >>= 8; right shift 8 bits to grab next character

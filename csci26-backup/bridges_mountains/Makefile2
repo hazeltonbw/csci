@@ -1,0 +1,5 @@
+a.out: main.cc
+	g++-9 -Wall -Wextra -Wpedantic -Wunused -pedantic-errors -std=c++17 -g -fmax-errors=1 -Wfatal-errors -D_GLIBCXX_DEBUG -fsanitize=undefined -fsanitize=address main.cc -lcurl -lbridges
+
+clean:
+	rm -f *.o a.out core
